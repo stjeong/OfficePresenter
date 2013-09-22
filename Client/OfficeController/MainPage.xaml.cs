@@ -89,5 +89,10 @@ namespace OfficeController
                 }
             }
         }
+
+        private void AdControl_ErrorOccurred(object sender, Microsoft.Advertising.AdErrorEventArgs e)
+        {
+            // MessageBox.Show(e.Error.ToString());
+        }
     }
 }

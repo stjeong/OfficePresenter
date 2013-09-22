@@ -32,6 +32,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="80"></RowDefinition>
                 <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -45,7 +46,10 @@
             <TextBlock VerticalAlignment="Center" Grid.Row="1">Port</TextBlock>
             <TextBox x:Name="txtPort" Text="{Binding Path=Application.Port, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"></TextBox>
             <Button x:Name="btnConnect" Padding="0" Grid.Row="1" Grid.Column="2" Click="btnConnectClicked">Connect</Button>
-            
+
+            <Grid Grid.Row="2" Grid.ColumnSpan="3" xmlns:adctl="clr-namespace:Microsoft.Advertising.Mobile.UI;assembly=Microsoft.Advertising.Mobile.UI">
+                <adctl:AdControl ErrorOccurred="AdControl_ErrorOccurred" AdUnitId="10188660" ApplicationId="753d1b55-0939-4d75-80d2-dc28ef81ba1d" Height="50" Width="300" />
+            </Grid>
         </Grid>
         
         <Grid Grid.Row="2" Margin="12,0,12,0">
