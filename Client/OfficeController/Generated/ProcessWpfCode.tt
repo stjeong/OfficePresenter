@@ -1,0 +1,161 @@
+﻿<#@ template language="C#" Hostspecific="True" #>
+
+<#@ assembly name="System.Xml.dll" #>
+
+<#@ Import Namespace="System.Xml" #>
+<#@ Import Namespace="System.Collections" #>
+
+<#
+	// ver 1.0
+	// this.XmlPath = "WPFAux.xml";
+
+	if (string.IsNullOrEmpty(this.XmlPath) == true)
+	{
+		return null;
+	}
+	
+	XmlDocument xml = new XmlDocument();
+	xml.Load(Host.ResolvePath(this.XmlPath));
+
+	XmlNode moduleNode = xml.SelectSingleNode("module");
+
+	string nsText = moduleNode.Attributes.GetNamedItem("namespace").InnerText;
+	XmlNodeList clrNamespaces = moduleNode.SelectNodes("clrnamespace/item");
+
+	XmlNodeList typeList = moduleNode.SelectNodes("type");
+
+#>
+
+namespace <#= nsText #>
+{
+<#
+	this.PushIndent("    ");
+	foreach (XmlNode item in clrNamespaces)
+	{
+#>
+using <#=  item.InnerText #>;
+<#
+	}
+	
+	foreach (XmlNode type in typeList)
+	{
+		var xmlAttr = type.Attributes;
+		string typeName = xmlAttr.GetNamedItem("name").InnerText;
+		bool observable = bool.Parse(xmlAttr.GetNamedItem("observable").InnerText);
+		bool bindingImplement = bool.Parse(xmlAttr.GetNamedItem("bindingImplement").InnerText);
+		bool skipCtor = bool.Parse(xmlAttr.GetNamedItem("skipCtor").InnerText);
+#>
+
+[DataContract]
+public partial class <#= typeName #>
+<#
+		if (bindingImplement == true)
+		{
+			#>
+			: INotifyPropertyChanged
+			<#
+		}
+#>		
+{
+	public class Properties
+	{
+<#
+		var dpList = type.SelectNodes("properties/property");
+		foreach (XmlNode dpItem in dpList)
+		{
+			var dpAttr = dpItem.Attributes;
+			string dpName = dpAttr.GetNamedItem("name").InnerText;
+#>
+		public const string <#= dpName #> = " <#= dpName #>";
+<#
+		}
+#>
+	}
+	
+<#
+		dpList = type.SelectNodes("properties/property");
+		foreach (XmlNode dpItem in dpList)
+		{
+			var dpAttr = dpItem.Attributes;
+			string dpName = dpAttr.GetNamedItem("name").InnerText;
+			string dpTypeName = dpAttr.GetNamedItem("type").InnerText;
+			string dpPrivateName = dpName;
+			if (char.IsUpper(dpName[0]) == true)
+			{
+				char ch = (char)(dpName[0] + 32);
+				dpPrivateName = ch.ToString() + dpName.Substring(1);
+			}
+			
+			bool hasDefaultValue = dpAttr.GetNamedItem("defaultValue") != null;			
+			string defaultValueText = string.Empty;
+			if (hasDefaultValue == true)
+			{
+				defaultValueText = " = " + dpAttr.GetNamedItem("defaultValue").InnerText;
+			}
+			
+			bool hasPostCode = dpItem.SelectSingleNode("postCode") != null;
+			string postCodeText = string.Empty;
+			if (hasPostCode == true)
+			{
+				postCodeText = dpItem.SelectSingleNode("postCode").InnerText;
+			}
+			// string dpDefaultValue = dpAttr.GetNamedItem("defaultValue").InnerText;
+			
+			bool isCollection = dpAttr.GetNamedItem("isCollection") != null;
+			if (isCollection == true)
+			{
+				isCollection = bool.Parse(dpAttr.GetNamedItem("isCollection").InnerText);
+			}
+			
+			if (isCollection == true)
+			{
+				dpTypeName = "List<" + dpTypeName + ">";
+			}
+			
+#>
+	<#= dpTypeName #> _<#= dpPrivateName #><#= defaultValueText #>;
+	/// <exclude />
+	[DataMember]
+	public <#= dpTypeName #> <#= dpName #>
+	{
+		get { return this._<#= dpPrivateName #>; }
+		
+		set
+		{
+			if (this._<#= dpPrivateName #> == value)
+			{
+				return;
+			}
+			
+			this._<#= dpPrivateName #> = value;
+			OnPropertyChanged("<#= dpName #>"); <#= postCodeText #>
+		}
+	}
+	
+<#
+		}
+#>
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	protected virtual void OnPropertyChanged(string propertyName)
+	{
+		if (PropertyChanged == null)
+		{
+			return;
+		}
+
+		PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+	}    
+}
+<#
+	}
+	
+	this.PopIndent();
+#>
+
+}
+
+<#+
+	string XmlPath = "";
+#>
+

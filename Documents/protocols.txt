@@ -1,0 +1,58 @@
+﻿
+Supported JSON Formats
+
+===============================================================================================
+Request URL: /getSnapshot
+Sample: http://localhost:5502/getSnapshot
+
+Response Format(JSON)
+
+{
+	"List":[ 
+			{"ImageAsText":"...[base64]...", "Note":"...[memo]...", "AnimationCount": "0"},
+			{"ImageAsText":"...[base64]...", "Note":"...[memo]...", "AnimationCount": "1"},
+			{"ImageAsText":"...[base64]...", "Note":"...[memo]...", "AnimationCount": "0"}
+		   ],
+	"Count":3, "Width":480," Height":358
+}
+
+Description: Retrieve snapshots and memo for PPT's all slides
+	Count: Total count of slide in PPT
+	Width: Width of thumbnail for slide
+	Height: Height of thumbnail for slide
+
+---------------------------------------------
+
+Request URL: /setSlide/[number]
+Sample: http://localhost:5502/setSlide/5
+
+Response: OK
+
+Description: Set current slide in show.
+
+---------------------------------------------
+
+Request: URL: /nextAnimation
+Sample: http://localhost:5502/nextAnimation
+
+Response: OK
+
+Description: Run next animation in slide
+
+---------------------------------------------
+
+Request URL: /startShow
+Sample: http://localhost:5502/startShow
+
+Response: OK
+
+Description: Make show start and set #1 slide in show.
+
+---------------------------------------------
+
+Request URL: /startShow/[number]
+Sample: http://localhost:5502/startShow/5
+
+Response OK
+
+Description: Make show start and set [number] slide in show.

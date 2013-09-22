@@ -1,0 +1,8 @@
+﻿<#@ template debug="false" hostspecific="True" language="C#" #>
+<#@ output extension=".generated.cs" #>
+
+<#
+	this.XmlPath = "WPFAux.xml";
+#>
+
+<#@ Include file="ProcessWpfCode.tt" #>

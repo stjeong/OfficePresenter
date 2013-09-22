@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<module namespace="OfficeController">
+
+    <clrnamespace>
+        <item>System.Data</item>
+        <item>System</item>
+
+        <item>System.Collections.Generic</item>
+        <item>System.Text</item>
+        <item>System.IO</item>
+        <item>System.Diagnostics</item>
+        <item>System.Configuration</item>
+        <item>System.Runtime.InteropServices</item>
+        <item>System.ComponentModel</item>
+        <item>System.Runtime.CompilerServices</item>
+        <item>System.Runtime.Serialization</item>
+        <item>System.Collections.ObjectModel</item>
+    </clrnamespace>
+
+    <type name="App" observable="true" bindingImplement="true" skipCtor="true">
+        <properties>
+            <property name="IPList" type="ObservableCollection&lt;string&gt;" />
+            <property name="IPSelected" type="string" />
+            <property name="Port" type="int" />
+        </properties>
+    </type>
+
+    <type name="MainPage" observable="true" bindingImplement="true" skipCtor="true">
+        <properties>
+        </properties>
+    </type>
+    
+</module>
