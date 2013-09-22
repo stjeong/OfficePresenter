@@ -90,7 +90,15 @@ namespace DocumentController
 
                 foreach (Shape shape in nodePath.Shapes)
                 {
-                    if (shape.PlaceholderFormat.Type == PpPlaceholderType.ppPlaceholderBody)
+                    PpPlaceholderType currentType = PpPlaceholderType.ppPlaceholderObject;
+
+                    try
+                    {
+                        currentType = shape.PlaceholderFormat.Type;
+                    }
+                    catch { }
+
+                    if (currentType == PpPlaceholderType.ppPlaceholderBody)
                     {
                         if (shape.HasTextFrame == Microsoft.Office.Core.MsoTriState.msoTrue)
                         {
@@ -141,10 +149,20 @@ namespace DocumentController
             {
                 using (Image img = Image.FromFile(path))
                 {
+                    ImageCodecInfo codecInfo = GetEncoderInfo(ImageFormat.Jpeg);
+
                     using (Image thumbnail = img.GetThumbnailImage(width, height, delegate { return false; }, IntPtr.Zero))
                     {
                         MemoryStream ms = new MemoryStream();
-                        thumbnail.Save(ms, ImageFormat.Jpeg);
+
+                        EncoderParameters parameters = new EncoderParameters(1);
+
+                        //  Quality: 75
+                        parameters.Param[0] = new EncoderParameter(
+                            System.Drawing.Imaging.Encoder.Quality, 50L);
+                        thumbnail.Save(ms, codecInfo, parameters);
+
+                        // thumbnail.Save(ms, ImageFormat.Png);
                         ms.Position = 0;
 
                         return Convert.ToBase64String(ms.GetBuffer());
@@ -156,6 +174,14 @@ namespace DocumentController
             }
             
             return string.Empty;
+        }
+
+        public static ImageCodecInfo GetEncoderInfo(ImageFormat format)
+        {
+            return ImageCodecInfo.GetImageEncoders().ToList().Find(delegate(ImageCodecInfo codec)
+            {
+                return codec.FormatID == format.Guid;
+            });
         }
 
         public void SetCurrentSlide(int slideNumber)

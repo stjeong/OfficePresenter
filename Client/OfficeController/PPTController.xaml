@@ -35,8 +35,7 @@
                 <RowDefinition Height="100"></RowDefinition>
             </Grid.RowDefinitions>
 
-
-            <controls:Panorama x:Name="panorama">
+            <controls:Panorama VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="panorama">
             </controls:Panorama>
 
             <ListBox Grid.Row="2" x:Name="imageList"
@@ -45,7 +44,7 @@
                 
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
+                        <StackPanel VirtualizingStackPanel.VirtualizationMode="Recycling" Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 

@@ -162,9 +162,11 @@ namespace OfficeController
             {
                 string data = PhoneApplicationService.Current.State["Document"] as string;
 
-                MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data));
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(PPTDocument));
-                this.Application.Document = serializer.ReadObject(ms) as PPTDocument;
+                using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+                {
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(PPTDocument));
+                    this.Application.Document = serializer.ReadObject(ms) as PPTDocument;
+                }
             }
 
             NavigationContext.QueryString.TryGetValue("ip", out _ipAddress);
@@ -193,8 +195,12 @@ namespace OfficeController
                 img.Tap += new EventHandler<GestureEventArgs>(img_Tap);
 
                 MemoryStream ms = new MemoryStream(jpegContents);
-                WriteableBitmap bmp = PictureDecoder.DecodeJpeg(ms, 100, 100);
-                img.Source = bmp;
+
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.SetSource(ms);
+                ms.Dispose();
+
+                img.Source = bitmapImage;
                 img.Tag = tagData;
 
                 Border border = new Border();
@@ -219,11 +225,8 @@ namespace OfficeController
                 grid.RowDefinitions.Add(new RowDefinition());
                 grid.RowDefinitions.Add(new RowDefinition());
 
-                ms.Position = 0;
-                bmp = PictureDecoder.DecodeJpeg(ms, this.Application.Document.Width, this.Application.Document.Height);
-
                 img = new Image();
-                img.Source = bmp;
+                img.Source = bitmapImage;
                 Grid.SetRow(img, 0);
 
                 TextBox txt = new TextBox();

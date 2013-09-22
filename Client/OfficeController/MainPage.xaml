@@ -40,11 +40,11 @@
             </Grid.ColumnDefinitions>
             
             <TextBlock VerticalAlignment="Center">IP</TextBlock>
-            <TextBox Text="{Binding Path=Application.IPSelected, Mode=TwoWay}" Grid.Column="1" Grid.ColumnSpan="2"></TextBox>
+            <TextBox x:Name="txtIP" Text="{Binding Path=Application.IPSelected, Mode=TwoWay}" Grid.Column="1" Grid.ColumnSpan="2"></TextBox>
             
             <TextBlock VerticalAlignment="Center" Grid.Row="1">Port</TextBlock>
-            <TextBox Text="{Binding Path=Application.Port, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"></TextBox>
-            <Button Padding="0" Grid.Row="1" Grid.Column="2" Click="btnConnectClicked">Connect</Button>
+            <TextBox x:Name="txtPort" Text="{Binding Path=Application.Port, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"></TextBox>
+            <Button x:Name="btnConnect" Padding="0" Grid.Row="1" Grid.Column="2" Click="btnConnectClicked">Connect</Button>
             
         </Grid>
         

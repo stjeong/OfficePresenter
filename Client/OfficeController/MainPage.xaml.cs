@@ -46,13 +46,30 @@ namespace OfficeController
             wc.Headers[HttpRequestHeader.CacheControl] = "no-cache";
             wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(SnapshotCompleted);
             wc.DownloadStringAsync(uri);
+
+            EnableControls(false);
+        }
+
+        private void EnableControls(bool enable)
+        {
+            btnConnect.IsEnabled = enable;
+            txtIP.IsEnabled = enable;
+            txtPort.IsEnabled = enable;
         }
 
         void SnapshotCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
+            EnableControls(true);
+
             if (e.Error != null)
             {
+                string url = string.Format("{0}:{1}", this.Application.IPSelected, this.Application.Port);
+
+#if DEBUG2
                 MessageBox.Show(e.Error.ToString());
+#else
+                MessageBox.Show("Can't connect to Desktop Application: " + url);
+#endif
             }
             else
             {
