@@ -56,8 +56,8 @@
                 <RowDefinition Height="80"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <TextBlock TextWrapping="Wrap">1. Download desktop application for controlling PowerPoint (http://www.sysnet.pe.kr/ppt)</TextBlock>
-            <TextBlock TextWrapping="Wrap" Grid.Row="1">2. At the desktop application, open your Powerpoint document to go show.</TextBlock>
+            <TextBlock TextWrapping="Wrap">1. Download desktop application at http://www.sysnet.pe.kr/go/ppt</TextBlock>
+            <TextBlock TextWrapping="Wrap" Grid.Row="1">2. Run the desktop application and open your Powerpoint document to go show.</TextBlock>
             <TextBlock TextWrapping="Wrap" Grid.Row="2">3. Type IP address of your PC running the desktop application, then press 'Connect' button on this app.</TextBlock>
             <TextBlock TextWrapping="Wrap" Grid.Row="3">4. Enjoy your app.</TextBlock>
         </Grid>
