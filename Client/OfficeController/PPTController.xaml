@@ -9,6 +9,9 @@
     
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"  
     
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    
+    xmlns:local="clr-namespace:OfficeController"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -25,7 +28,7 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="Office Controller" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="ApplicationTitle" Text="Office Controller ver 1.2" Style="{StaticResource PhoneTextNormalStyle}"/>
         </StackPanel>
 
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
@@ -35,34 +38,52 @@
                 <RowDefinition Height="100"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <controls:Panorama VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="panorama">
+            <controls:Panorama VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="panorama"
+                               ItemsSource="{Binding Path=Slides}"
+                               SelectionChanged="panorama_SelectionChanged"
+                               DoubleTap="panoramaItem_DoubleTap"
+                               >
+                <controls:Panorama.HeaderTemplate>
+                    <DataTemplate></DataTemplate>
+                </controls:Panorama.HeaderTemplate>
+                
+                    <controls:Panorama.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <Image Source="{Binding Path=Image}"></Image>
+                            <TextBox IsReadOnly="True" Text="{Binding Path=Memo}" Grid.Row="1" />
+                        </Grid>
+                    </DataTemplate>
+                </controls:Panorama.ItemTemplate>
             </controls:Panorama>
 
             <ListBox Grid.Row="2" x:Name="imageList"
+                     ItemsSource="{Binding Path=Slides}"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     VirtualizingStackPanel.VirtualizationMode="Recycling"
                      ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Yellow">
+                            <Image Tap="img_Tap" Tag="{Binding Path=TagData}" Source="{Binding Path=Image}" />
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel VirtualizingStackPanel.VirtualizationMode="Recycling" Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
-                
+
             </ListBox>
 
         </Grid>
     </Grid>
- 
-    <!--Sample code showing usage of ApplicationBar-->
-    <!--<phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
-                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>-->
 
 </phone:PhoneApplicationPage>

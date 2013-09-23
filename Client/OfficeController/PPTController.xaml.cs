@@ -28,132 +28,17 @@ namespace OfficeController
 
         string _port = string.Empty;
         string _ipAddress = string.Empty;
-
-        public PPTController()
-        {
-            InitializeComponent();
-
-            this.DataContext = this;
-
-            panorama.SelectionChanged += new EventHandler<SelectionChangedEventArgs>(panorama_SelectionChanged);
-
-        }
-
-        void panItem_DoubleTap(object sender, GestureEventArgs e)
-        {
-            SetNextAnimation();
-        }
-
-        void panorama_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count == 0)
-            {
-                return;
-            }
-
-            SlideItemData tagData = (e.AddedItems[0] as PanoramaItem).Tag as SlideItemData;
-
-            int slideIndex = tagData.SlideIndex;
-            SetSlide(slideIndex, tagData.AnimationCount);
-            SetSelectedBorder(slideIndex);
-        }
-
-        void SetSelectedBorder(int slideIndex)
-        {
-            if (oldBorder != null)
-            {
-                oldBorder.BorderThickness = new Thickness(0);
-            }
-
-            Border border = imageList.Items[slideIndex - 1] as Border;
-            border.BorderThickness = new Thickness(1);
-
-            oldBorder = border;
-
-            imageList.ScrollIntoView(border);
-        }
-
-        void img_Tap(object sender, GestureEventArgs e)
-        {
-            SlideItemData tagData = (sender as Image).Tag as SlideItemData;
-            
-            int slideIndex = tagData.SlideIndex;
-            SetSlide(slideIndex, tagData.AnimationCount);
-            SetSelectedBorder(slideIndex);
-        }
-
-        void SetSlide(int number, int animationCount)
-        {
-            countOfAnimation = animationCount;
-            currentAnimation = 0;
-
-            string url = string.Format("http://{0}:{1}/setSlide/{2}&junk={3}", _ipAddress, _port,
-                number, DateTime.Now);
-
-            WebClient wc = new WebClient();
-            wc.Headers[HttpRequestHeader.CacheControl] = "no-cache";
-            wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(SetSlideCompleted);
-            wc.DownloadStringAsync(new Uri(url));
-            _animationLock = false;
-        }
-
-        void StartShow()
-        {
-            PanoramaItem panItem = this.panorama.Items[0] as PanoramaItem;
-            SlideItemData tagData = panItem.Tag as SlideItemData;
-
-            countOfAnimation = tagData.AnimationCount;
-            currentAnimation = 0;
-
-            string url = string.Format("http://{0}:{1}/startShow&junk={2}", _ipAddress, _port,
-                DateTime.Now);
-
-            WebClient wc = new WebClient();
-            wc.Headers[HttpRequestHeader.CacheControl] = "no-cache";
-            wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(SetSlideCompleted);
-            wc.DownloadStringAsync(new Uri(url));
-        }
-
+        
+        bool _animationLock = false;
+        
         public App Application
         {
             get { return (App.Current as App); }
         }
-
-        bool _animationLock = false;
-        void SetNextAnimation()
+        
+        public PPTController()
         {
-            if (countOfAnimation <= currentAnimation)
-            {
-                return;
-            }
-
-            if (_animationLock == true)
-            {
-                System.Diagnostics.Debug.WriteLine("Skipped: " + _animationLock);
-                return;
-            }
-
-            _animationLock = true;
-            System.Diagnostics.Debug.WriteLine("AniStart: " + _animationLock);
-
-            string url = string.Format("http://{0}:{1}/nextAnimation&junk={2}", _ipAddress, _port,
-                DateTime.Now);
-
-            WebClient wc = new WebClient();
-            wc.Headers[HttpRequestHeader.CacheControl] = "no-cache";
-            wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(SetAnimationCompleted);
-            wc.DownloadStringAsync(new Uri(url));
-        }
-
-        void SetAnimationCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            currentAnimation++;
-            _animationLock = false;
-            System.Diagnostics.Debug.WriteLine("AniEnd: " + _animationLock);
-        }
-
-        void SetSlideCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
+            InitializeComponent();
         }
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
@@ -182,69 +67,167 @@ namespace OfficeController
 
         private void LoadDocument()
         {
+            this.Slides = new System.Collections.ObjectModel.ObservableCollection<SlidePage>();
             int slideIndex = 1;
+
             foreach (var item in this.Application.Document.List)
             {
-                SlideItemData tagData = new SlideItemData();
-                tagData.AnimationCount = item.AnimationCount;
-                tagData.SlideIndex = slideIndex;
-
                 // 이미지 목록에 추가
                 byte[] jpegContents = Convert.FromBase64String(item.ImageAsText);
-                Image img = new Image();
-                img.Tap += new EventHandler<GestureEventArgs>(img_Tap);
-
                 MemoryStream ms = new MemoryStream(jpegContents);
 
                 BitmapImage bitmapImage = new BitmapImage();
                 bitmapImage.SetSource(ms);
                 ms.Dispose();
 
-                img.Source = bitmapImage;
-                img.Tag = tagData;
+                SlidePage page = new SlidePage();
+                page.Image = bitmapImage;
+                page.Memo = item.Note;
 
-                Border border = new Border();
-                border.Child = img;
-                border.BorderBrush = new SolidColorBrush(Colors.Yellow);
+                SlideItemData tagData = new SlideItemData();
+                tagData.AnimationCount = item.AnimationCount;
+                tagData.SlideIndex = slideIndex;
 
-                if (slideIndex == 1)
-                {
-                    // 처음 슬라이드를 선택 표시
-                    border.BorderThickness = new Thickness(1);
-                    oldBorder = border;
-                }
+                page.TagData = tagData;
 
-                imageList.Items.Add(border);
-
-                // 파노라마 콘트롤에 추가
-                PanoramaItem panItem = new PanoramaItem();
-                panItem.DoubleTap += new EventHandler<GestureEventArgs>(panItem_DoubleTap);
-                panItem.Tag = tagData;
-                Grid grid = new Grid();
-
-                grid.RowDefinitions.Add(new RowDefinition());
-                grid.RowDefinitions.Add(new RowDefinition());
-
-                img = new Image();
-                img.Source = bitmapImage;
-                Grid.SetRow(img, 0);
-
-                TextBox txt = new TextBox();
-                txt.Text = item.Note;
-                txt.IsReadOnly = true;
-                Grid.SetRow(txt, 1);
-
-                grid.Children.Add(img);
-                grid.Children.Add(txt);
-
-                panItem.Content = grid;
-
-                panorama.Items.Add(panItem);
-
+                this.Slides.Add(page);
                 slideIndex++;
             }
 
             StartShow();
+
+            SetSelectedBorder(1);
+        }
+
+        void panoramaItem_DoubleTap(object sender, GestureEventArgs e)
+        {
+            SetNextAnimation();
+        }
+
+        void panorama_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0)
+            {
+                return;
+            }
+
+            SlideItemData tagData = (e.AddedItems[0] as SlidePage).TagData;
+
+            int slideIndex = tagData.SlideIndex;
+            SetSlide(slideIndex, tagData.AnimationCount);
+            SetSelectedBorder(slideIndex);
+        }
+
+        void SetSelectedBorder(int slideIndex)
+        {
+            if (oldBorder != null)
+            {
+                oldBorder.BorderThickness = new Thickness(0);
+            }
+
+            object obj = this.Slides[slideIndex - 1];
+
+            ListBoxItem boxItem =
+                imageList.ItemContainerGenerator.ContainerFromItem(obj) as ListBoxItem;
+
+            if (boxItem == null)
+            {
+                return;
+            }
+
+            Border border = this.FindVisualChild<Border>(boxItem);
+
+            if (border == null)
+            {
+                return;
+            }
+
+            border.BorderBrush = new SolidColorBrush(Colors.Yellow);
+            border.BorderThickness = new Thickness(1);
+
+            oldBorder = border;
+
+            imageList.ScrollToCenterOfView(obj); 
+        }
+
+        void img_Tap(object sender, GestureEventArgs e)
+        {
+            SlideItemData tagData = (sender as Image).Tag as SlideItemData;
+            
+            int slideIndex = tagData.SlideIndex;
+            SetSlide(slideIndex, tagData.AnimationCount);
+            SetSelectedBorder(slideIndex);
+        }
+
+        void SetSlide(int number, int animationCount)
+        {
+            countOfAnimation = animationCount;
+            currentAnimation = 0;
+
+            string url = string.Format("http://{0}:{1}/setSlide/{2}", _ipAddress, _port, number);
+            App.CallUrl(url, null);
+
+            _animationLock = false;
+        }
+
+        void StartShow()
+        {
+            SlideItemData tagData = this.Slides[0].TagData;
+
+            countOfAnimation = tagData.AnimationCount;
+            currentAnimation = 0;
+
+            string url = string.Format("http://{0}:{1}/startShow", _ipAddress, _port);
+            App.CallUrl(url, null);
+        }
+
+        void SetNextAnimation()
+        {
+            if (countOfAnimation <= currentAnimation)
+            {
+                return;
+            }
+
+            if (_animationLock == true)
+            {
+                return;
+            }
+
+            _animationLock = true;
+            System.Diagnostics.Debug.WriteLine("AniStart: " + _animationLock);
+
+            string url = string.Format("http://{0}:{1}/nextAnimation", _ipAddress, _port);
+            App.CallUrl(url, SetAnimationCompleted);
+        }
+
+        void SetAnimationCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            currentAnimation++;
+            _animationLock = false;
+        }
+
+        // How to: Find DataTemplate-Generated Elements
+        // ; http://msdn.microsoft.com/en-us/library/bb613579.aspx
+        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is childItem)
+                {
+                    return (childItem)child;
+                }
+                else
+                {
+                    childItem childOfChild = FindVisualChild<childItem>(child);
+                    if (childOfChild != null)
+                    {
+                        return childOfChild;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

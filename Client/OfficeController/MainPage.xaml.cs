@@ -23,8 +23,6 @@ namespace OfficeController
         public MainPage()
         {
             InitializeComponent();
-            this.DataContext = this;
-
 #if DEBUG
             btnConnectClicked(null, null);
 #endif
@@ -37,16 +35,9 @@ namespace OfficeController
 
         private void btnConnectClicked(object sender, RoutedEventArgs e)
         {
-            string url = string.Format("http://{0}:{1}/getSnapshot&junk={2}", this.Application.IPSelected, this.Application.Port,
-                DateTime.Now);
-            Uri uri = new Uri(url);
+            string url = string.Format("http://{0}:{1}/getSnapshot", this.Application.IPSelected, this.Application.Port);
 
-            WebClient wc = new WebClient();
-
-            wc.Headers[HttpRequestHeader.CacheControl] = "no-cache";
-            wc.DownloadStringCompleted += new DownloadStringCompletedEventHandler(SnapshotCompleted);
-            wc.DownloadStringAsync(uri);
-
+            App.CallUrl(url, SnapshotCompleted);
             EnableControls(false);
         }
 

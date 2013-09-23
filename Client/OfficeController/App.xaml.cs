@@ -67,7 +67,7 @@ namespace OfficeController
 
             this.IPList = new System.Collections.ObjectModel.ObservableCollection<string>();
 #if DEBUG
-            this.IPSelected = "192.168.1.84";
+            this.IPSelected = "169.254.80.80";
 #endif
             this.Port = 5022;
         }
@@ -120,6 +120,19 @@ namespace OfficeController
 #endif
 
             e.Handled = true;
+        }
+
+        public static void CallUrl(string url, DownloadStringCompletedEventHandler handler)
+        {
+            WebClient wc = new WebClient();
+            wc.Headers[HttpRequestHeader.IfModifiedSince] = DateTime.UtcNow.ToString();
+
+            if (handler != null)
+            {
+                wc.DownloadStringCompleted += handler;
+            }
+
+            wc.DownloadStringAsync(new Uri(url));
         }
 
         #region Phone application initialization
