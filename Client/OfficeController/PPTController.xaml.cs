@@ -83,6 +83,7 @@ namespace OfficeController
                 SlidePage page = new SlidePage();
                 page.Image = bitmapImage;
                 page.Memo = item.Note;
+                page.AnimationRemains = item.AnimationCount;
 
                 SlideItemData tagData = new SlideItemData();
                 tagData.AnimationCount = item.AnimationCount;
@@ -111,7 +112,10 @@ namespace OfficeController
                 return;
             }
 
-            SlideItemData tagData = (e.AddedItems[0] as SlidePage).TagData;
+            SlidePage slidePage = (e.AddedItems[0] as SlidePage);
+            SlideItemData tagData = slidePage.TagData;
+
+            slidePage.AnimationRemains = tagData.AnimationCount;
 
             int slideIndex = tagData.SlideIndex;
             SetSlide(slideIndex, tagData.AnimationCount);
@@ -194,6 +198,10 @@ namespace OfficeController
             }
 
             _animationLock = true;
+
+            SlidePage currentPage = (panorama.SelectedItem as SlidePage);
+            currentPage.AnimationRemains--;
+
             System.Diagnostics.Debug.WriteLine("AniStart: " + _animationLock);
 
             string url = string.Format("http://{0}:{1}/nextAnimation", _ipAddress, _port);

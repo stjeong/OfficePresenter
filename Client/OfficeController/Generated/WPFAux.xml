@@ -44,6 +44,7 @@
       <property name="Memo" type="string" />
       <property name="TagData" type="SlideItemData" />
       <property name="IsSelected" type="bool" />
+      <property name="AnimationRemains" type="int" />
     </properties>
   </type>
 

@@ -19,6 +19,10 @@
     mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True">
 
+    <phone:PhoneApplicationPage.Resources>
+        <local:IntegerZeroHiddenConverter x:Key="converter" />
+    </phone:PhoneApplicationPage.Resources>
+
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
@@ -46,8 +50,8 @@
                 <controls:Panorama.HeaderTemplate>
                     <DataTemplate></DataTemplate>
                 </controls:Panorama.HeaderTemplate>
-                
-                    <controls:Panorama.ItemTemplate>
+
+                <controls:Panorama.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="0">
                             <Grid.RowDefinitions>
@@ -57,6 +61,20 @@
 
                             <Image Source="{Binding Path=Image}"></Image>
                             <TextBox IsReadOnly="True" Text="{Binding Path=Memo}" Grid.Row="1" />
+
+                            <Border VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Width="40" Height="40"
+                                    Background="Black"
+                                    CornerRadius="20"
+                                    Visibility="{Binding Path=AnimationRemains, Converter={StaticResource converter}}"
+                                    BorderBrush="Blue" BorderThickness="4">
+                                <TextBlock
+                                     TextAlignment="Center"
+                                     FontWeight="Bold"
+                                     Foreground="Yellow"
+                                     Text="{Binding Path=AnimationRemains}" />
+                            </Border>
                         </Grid>
                     </DataTemplate>
                 </controls:Panorama.ItemTemplate>

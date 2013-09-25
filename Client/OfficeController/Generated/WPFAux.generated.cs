@@ -197,6 +197,7 @@ namespace OfficeController
     		public const string Memo = " Memo";
     		public const string TagData = " TagData";
     		public const string IsSelected = " IsSelected";
+    		public const string AnimationRemains = " AnimationRemains";
     	}
     	
     	BitmapImage _image;
@@ -272,6 +273,25 @@ namespace OfficeController
     			
     			this._isSelected = value;
     			OnPropertyChanged("IsSelected"); 
+    		}
+    	}
+    	
+    	int _animationRemains;
+    	/// <exclude />
+    	[DataMember]
+    	public int AnimationRemains
+    	{
+    		get { return this._animationRemains; }
+    		
+    		set
+    		{
+    			if (this._animationRemains == value)
+    			{
+    				return;
+    			}
+    			
+    			this._animationRemains = value;
+    			OnPropertyChanged("AnimationRemains"); 
     		}
     	}
     	

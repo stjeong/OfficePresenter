@@ -79,6 +79,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WPFAux.tt</DependentUpon>
     </Compile>
+    <Compile Include="IntegerZeroHiddenConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
