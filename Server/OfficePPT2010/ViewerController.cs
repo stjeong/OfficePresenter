@@ -75,7 +75,7 @@ namespace DocumentController
             int slideNumber = 0;
 
             List<string> files = new List<string>();
-            files.AddRange(Directory.EnumerateFiles(_tempPath));
+            files.AddRange(Directory.GetFiles(_tempPath));
 
             files.Sort(CompareOnlyNumbers);
 
