@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -148,14 +147,7 @@ namespace DocumentController
         {
             if (Directory.Exists(_tempPath) == true)
             {
-                foreach (string path in Directory.EnumerateDirectories(_tempPath))
-                {
-                    try
-                    {
-                        Directory.Delete(path, true);
-                    }
-                    catch { }
-                }
+                Directory.Delete(_tempPath, true);
             }
         }
 

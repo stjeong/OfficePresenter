@@ -184,8 +184,11 @@ namespace Bend.Util {
             this.port = port;
         }
 
-        public void listen() {
+        public void listen() 
+        {
+#pragma warning disable 0618
             listener = new TcpListener(port);
+#pragma warning restore 0618
             listener.Start();
 
             try
