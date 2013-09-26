@@ -72,7 +72,6 @@ namespace OfficeController
 
             foreach (var item in this.Application.Document.List)
             {
-                // 이미지 목록에 추가
                 byte[] jpegContents = Convert.FromBase64String(item.ImageAsText);
                 MemoryStream ms = new MemoryStream(jpegContents);
 
@@ -169,7 +168,8 @@ namespace OfficeController
             currentAnimation = 0;
 
             string url = string.Format("http://{0}:{1}/setSlide/{2}", _ipAddress, _port, number);
-            App.CallUrl(url, null);
+
+            App.CallUrl(url, null, null);
 
             _animationLock = false;
         }
@@ -182,7 +182,8 @@ namespace OfficeController
             currentAnimation = 0;
 
             string url = string.Format("http://{0}:{1}/startShow", _ipAddress, _port);
-            App.CallUrl(url, null);
+
+            App.CallUrl(url, null, null);
         }
 
         void SetNextAnimation()
@@ -205,7 +206,7 @@ namespace OfficeController
             System.Diagnostics.Debug.WriteLine("AniStart: " + _animationLock);
 
             string url = string.Format("http://{0}:{1}/nextAnimation", _ipAddress, _port);
-            App.CallUrl(url, SetAnimationCompleted);
+            App.CallUrl(url, SetAnimationCompleted, null);
         }
 
         void SetAnimationCompleted(object sender, DownloadStringCompletedEventArgs e)

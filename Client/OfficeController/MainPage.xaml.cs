@@ -37,7 +37,9 @@ namespace OfficeController
         {
             string url = string.Format("http://{0}:{1}/getSnapshot", this.Application.IPSelected, this.Application.Port);
 
-            App.CallUrl(url, SnapshotCompleted);
+            TimeoutContext tc = new TimeoutContext();
+            tc.Timeout = 5000;
+            App.CallUrl(url, SnapshotCompleted, tc);
             EnableControls(false);
         }
 
@@ -51,6 +53,11 @@ namespace OfficeController
         void SnapshotCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             EnableControls(true);
+
+            if (e.Cancelled == true)
+            {
+                return;
+            }
 
             if (e.Error != null)
             {

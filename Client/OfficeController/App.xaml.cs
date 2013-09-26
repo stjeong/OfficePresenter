@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -11,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using OfficeInterface;
@@ -123,7 +125,7 @@ namespace OfficeController
             e.Handled = true;
         }
 
-        public static void CallUrl(string url, DownloadStringCompletedEventHandler handler)
+        public static void CallUrl(string url, DownloadStringCompletedEventHandler handler, TimeoutContext tc)
         {
             WebClient wc = new WebClient();
             wc.Headers[HttpRequestHeader.IfModifiedSince] = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
@@ -133,7 +135,38 @@ namespace OfficeController
                 wc.DownloadStringCompleted += handler;
             }
 
-            wc.DownloadStringAsync(new Uri(url));
+            wc.DownloadStringAsync(new Uri(url), tc);
+            if (tc != null)
+            {
+                wc.DownloadProgressChanged += tc.wc_DownloadProgressChanged;
+                tc.Tag = wc;
+                ThreadPool.QueueUserWorkItem(
+                    (obj) =>
+                    {
+                        TimeoutContext timeContext = obj as TimeoutContext;
+                        if (timeContext == null)
+                        {
+                            return;
+                        }
+
+                        WebClient wcInProgress = timeContext.Tag as WebClient;
+                        if (wcInProgress == null)
+                        {
+                            return;
+                        }
+
+                        Thread.Sleep(timeContext.Timeout);
+                        if (timeContext.Connected == true)
+                        {
+                            return;
+                        }
+
+                        if (timeContext.Completed == false)
+                        {
+                            wcInProgress.CancelAsync();
+                        }
+                    }, tc);
+            }
         }
 
         #region Phone application initialization
