@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Windows;
@@ -125,7 +126,7 @@ namespace OfficeController
         public static void CallUrl(string url, DownloadStringCompletedEventHandler handler)
         {
             WebClient wc = new WebClient();
-            wc.Headers[HttpRequestHeader.IfModifiedSince] = DateTime.UtcNow.ToString();
+            wc.Headers[HttpRequestHeader.IfModifiedSince] = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
 
             if (handler != null)
             {
