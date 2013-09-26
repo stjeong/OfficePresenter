@@ -57,7 +57,12 @@
                                  ApplicationId="753d1b55-0939-4d75-80d2-dc28ef81ba1d" Height="100" Width="640" />
             </Grid>
         </Grid>
-        
+
+        <ProgressBar Grid.Row="1" Grid.RowSpan="2"
+               IsIndeterminate="true" Visibility="Collapsed"
+               x:Name="customIndeterminateProgressBar"
+               Style="{StaticResource CustomIndeterminateProgressBar}" />
+
         <Grid Grid.Row="2" Margin="12,0,12,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80"></RowDefinition>

@@ -20,12 +20,18 @@ namespace OfficeController
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        Brush _originalBrush;
+
         public MainPage()
         {
             InitializeComponent();
 #if DEBUG
             btnConnectClicked(null, null);
 #endif
+            _originalBrush = this.Foreground;
+
+
+            Application.IPSelected = "192.168.0.25";
         }
 
         public App Application
@@ -39,23 +45,43 @@ namespace OfficeController
 
             TimeoutContext tc = new TimeoutContext();
             tc.Timeout = 5000;
-            App.CallUrl(url, SnapshotCompleted, tc);
-            EnableControls(false);
+
+            if (App.CallUrl(url, SnapshotCompleted, tc) == true)
+            {
+                EnableControls(false);
+            }
         }
 
         private void EnableControls(bool enable)
         {
+            if (enable == false)
+            {
+                this.Foreground = new SolidColorBrush(Colors.Gray);
+                customIndeterminateProgressBar.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                this.Foreground = _originalBrush;
+                customIndeterminateProgressBar.Visibility = System.Windows.Visibility.Collapsed;
+            }
+
             btnConnect.IsEnabled = enable;
             txtIP.IsEnabled = enable;
             txtPort.IsEnabled = enable;
         }
 
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            EnableControls(true);
+        }
+
         void SnapshotCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
-            EnableControls(true);
-
             if (e.Cancelled == true)
             {
+                EnableControls(true);
                 return;
             }
 
@@ -78,12 +104,12 @@ namespace OfficeController
                         PhoneApplicationService.Current.State["Document"] = e.Result;
                         string url = string.Format("/PPTController.xaml?ip={0}&port={1}",
                             this.Application.IPSelected, this.Application.Port);
+
                         this.NavigationService.Navigate(new Uri(url, UriKind.Relative));
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
                 }
             }
         }

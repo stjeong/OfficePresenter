@@ -88,6 +88,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ItemsControlExtensions.cs" />
+    <Compile Include="RelativeAnimatingContentControl.cs" />
     <Compile Include="SlideItemData.cs" />
     <Compile Include="TimeoutContext.cs" />
   </ItemGroup>

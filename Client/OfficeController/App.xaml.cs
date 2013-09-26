@@ -125,7 +125,7 @@ namespace OfficeController
             e.Handled = true;
         }
 
-        public static void CallUrl(string url, DownloadStringCompletedEventHandler handler, TimeoutContext tc)
+        public static bool CallUrl(string url, DownloadStringCompletedEventHandler handler, TimeoutContext tc)
         {
             WebClient wc = new WebClient();
             wc.Headers[HttpRequestHeader.IfModifiedSince] = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
@@ -135,7 +135,18 @@ namespace OfficeController
                 wc.DownloadStringCompleted += handler;
             }
 
-            wc.DownloadStringAsync(new Uri(url), tc);
+            Uri uri = null;
+
+            try
+            {
+                uri = new Uri(url);
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+
+            wc.DownloadStringAsync(uri, tc);
             if (tc != null)
             {
                 wc.DownloadProgressChanged += tc.wc_DownloadProgressChanged;
@@ -167,6 +178,8 @@ namespace OfficeController
                         }
                     }, tc);
             }
+
+            return true;
         }
 
         #region Phone application initialization
