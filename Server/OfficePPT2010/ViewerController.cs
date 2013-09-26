@@ -7,6 +7,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections;
+using System.Diagnostics;
 
 namespace DocumentController
 {
@@ -81,7 +82,7 @@ namespace DocumentController
 
             PPTDocument document = new PPTDocument();
 
-            for (int i = 0; i < _current.Slides.Count; i ++)
+            for (int i = 1; i <= _current.Slides.Count; i ++)
             {
                 Slide slide = null;
 
@@ -189,12 +190,10 @@ namespace DocumentController
 
                         EncoderParameters parameters = new EncoderParameters(1);
 
-                        //  Quality: 75
                         parameters.Param[0] = new EncoderParameter(
                             System.Drawing.Imaging.Encoder.Quality, 50L);
                         thumbnail.Save(ms, codecInfo, parameters);
 
-                        // thumbnail.Save(ms, ImageFormat.Png);
                         ms.Position = 0;
 
                         return Convert.ToBase64String(ms.GetBuffer());

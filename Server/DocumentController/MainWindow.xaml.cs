@@ -32,7 +32,7 @@ namespace DocumentController
         float _pptSlideHeightRatio;
 
         int _widthForWindowsPhone = 480;
-        
+
         string _snapshotForWindowsPhone = string.Empty;
         public string SnapshotText
         {
@@ -65,8 +65,6 @@ namespace DocumentController
 
             _tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "OfficePresenter");
             SetupHttpServer();
-
-            this.Closed += new EventHandler(MainWindow_Closed);
         }
 
         public void StartShow(int slideNumber)
@@ -85,9 +83,9 @@ namespace DocumentController
             this.Dispatcher.BeginInvoke(
                 new ThreadStart(
                     () =>
-                {
-                    _currentController.SetCurrentSlide(slideNumber);
-                }), null
+                    {
+                        _currentController.SetCurrentSlide(slideNumber);
+                    }), null
             );
         }
 
@@ -101,35 +99,6 @@ namespace DocumentController
                         _currentController.NextAnimation();
                     }), null
             );
-        }
-
-        void MainWindow_Closed(object sender, EventArgs e)
-        {
-            ReleaseSocketRelatedResource();
-            CloseAllDocuments();
-        }
-
-        private void ReleaseSocketRelatedResource()
-        {
-            try
-            {
-                if (_listener != null)
-                {
-                    _listener.Dispose();
-                }
-            }
-            catch { }
-            _listener = null;
-
-            try
-            {
-                if (_httpThread != null)
-                {
-                    _httpThread.Abort();
-                }
-            }
-            catch { }
-            _httpThread = null;
         }
 
         private void SetupHttpServer()
@@ -161,28 +130,72 @@ namespace DocumentController
             string folder = System.IO.Path.GetDirectoryName(typeof(MainWindow).Assembly.Location);
             string filePath = System.IO.Path.Combine(folder, fileName + ".dll");
 
-            byte [] fileContents = File.ReadAllBytes(filePath);
+            byte[] fileContents = File.ReadAllBytes(filePath);
             Assembly loaded = Assembly.Load(fileContents);
 
-            object ctlObject = loaded.CreateInstance("DocumentController.ViewerController");
-            return ctlObject as IPPTController;
+            return loaded.CreateInstance("DocumentController.ViewerController") as IPPTController;
         }
 
-        void btnOpenClicked(object sender, RoutedEventArgs e)
-        {
-            OpenFile();
-        }
-
-        private void OpenFile()
+        private void btnOpenClicked(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openDlg = new OpenFileDialog();
             if (openDlg.ShowDialog() == true)
             {
                 string path = openDlg.FileName;
-                this.Ready = "Loading...";
+
+                EnableControls(false);
+
                 WaitForPriority(DispatcherPriority.Background);
 
-                ProcessDocument(path, _tempPath, _widthForWindowsPhone);
+                ThreadPool.QueueUserWorkItem(
+                    (obj) =>
+                    {
+                        try
+                        {
+                            ProcessDocument(path, _tempPath, _widthForWindowsPhone);
+                        }
+                        catch
+                        {
+                        }
+
+                        Dispatcher.BeginInvoke(
+                            (ThreadStart)(() =>
+                            {
+                                this.Title = string.Format("{0} - {1}KB", _orgTitle, (_snapshotForWindowsPhone.Length / 1024));
+                                EnableControls(true);
+                            }));
+                    }, null);
+            }
+        }
+
+        private void EnableControls(bool enable)
+        {
+            if (enable == false)
+            {
+                this.Ready = "Loading...";
+                contentPanel.IsEnabled = false;
+                _snapshotForWindowsPhone = string.Empty;
+
+                // http://fragiledevelopment.wordpress.com/2009/11/13/rotating-an-image-with-wpf-in-xaml/
+                waitImage.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                contentPanel.IsEnabled = true;
+
+                waitImage.IsEnabled = false;
+                waitImage.Visibility = System.Windows.Visibility.Hidden;
+                if (string.IsNullOrEmpty(_snapshotForWindowsPhone) == false)
+                {
+                    this.Ready = "Ready";
+                    WaitForPriority(DispatcherPriority.Background);
+                }
+                else
+                {
+                    this.Ready = "Not Loaded";
+                    this.FilePath = string.Empty;
+                    WaitForPriority(DispatcherPriority.Background);
+                }
             }
         }
 
@@ -204,7 +217,6 @@ namespace DocumentController
 
             foreach (var item in _pptController)
             {
-                item.Clear();
                 if (item.Load(path, newTempPath) == true)
                 {
                     int height = (int)(width * _pptSlideHeightRatio);
@@ -215,18 +227,6 @@ namespace DocumentController
                     {
                         _snapshotForWindowsPhone = txt;
                         _currentController = item;
-                        this.Title = string.Format("{0} - {1}KB", _orgTitle, (_snapshotForWindowsPhone.Length / 1024));
-
-                        if (string.IsNullOrEmpty(_snapshotForWindowsPhone) == false)
-                        {
-                            this.Ready = "Ready";
-                            WaitForPriority(DispatcherPriority.Background);
-                        }
-                        else
-                        {
-                            this.Ready = "Not Loaded";
-                            WaitForPriority(DispatcherPriority.Background);
-                        }
 
                         break;
                     }
@@ -234,17 +234,9 @@ namespace DocumentController
             }
         }
 
-        private void CloseAllDocuments()
-        {
-            foreach (var item in _pptController)
-            {
-                item.Clear();
-            }
-        }
-
         private void PopulateIPList(System.Collections.ObjectModel.ObservableCollection<string> list)
         {
-            foreach (var item in GetInetAddress(System.Net.Sockets.AddressFamily.InterNetwork)) 
+            foreach (var item in GetInetAddress(System.Net.Sockets.AddressFamily.InterNetwork))
             {
                 list.Add(item.ToString());
             }
@@ -272,6 +264,45 @@ namespace DocumentController
             }
 
             return ipAddresses.ToArray();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            ReleaseSocketRelatedResource();
+            CloseAllDocuments();
+        }
+
+        private void ReleaseSocketRelatedResource()
+        {
+            try
+            {
+                if (_listener != null)
+                {
+                    _listener.Dispose();
+                }
+            }
+            catch { }
+            _listener = null;
+
+            try
+            {
+                if (_httpThread != null)
+                {
+                    _httpThread.Abort();
+                }
+            }
+            catch { }
+            _httpThread = null;
+        }
+
+        private void CloseAllDocuments()
+        {
+            foreach (var item in _pptController)
+            {
+                item.Clear();
+            }
         }
 
         internal static void WaitForPriority(DispatcherPriority priority)

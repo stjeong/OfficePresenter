@@ -69,9 +69,6 @@ namespace OfficeController
             }
 
             this.IPList = new System.Collections.ObjectModel.ObservableCollection<string>();
-#if DEBUG
-            this.IPSelected = "169.254.80.80";
-#endif
             this.Port = 5022;
         }
 

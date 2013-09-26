@@ -26,12 +26,10 @@ namespace OfficeController
         {
             InitializeComponent();
 #if DEBUG
+            Application.IPSelected = "192.168.0.25";
             btnConnectClicked(null, null);
 #endif
             _originalBrush = this.Foreground;
-
-
-            Application.IPSelected = "192.168.0.25";
         }
 
         public App Application

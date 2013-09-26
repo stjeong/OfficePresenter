@@ -9,7 +9,7 @@ namespace DocumentController
     {
         public bool Load(string documentPath, string tempPath)
         {
-            return true;
+            return false;
         }
 
         public PPTDocument ReadAll(int width, int height)
