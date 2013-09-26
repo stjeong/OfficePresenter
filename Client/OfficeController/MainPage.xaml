@@ -54,7 +54,7 @@
                 <adctl:AdControl ErrorOccurred="AdControl_ErrorOccurred"
                                  BorderBrush="Yellow" BorderThickness="3"
                                  AdUnitId="10189087"
-                                 ApplicationId="753d1b55-0939-4d75-80d2-dc28ef81ba1d" Height="100" Width="640" />
+                                 ApplicationId="753d1b55-0939-4d75-80d2-dc28ef81ba1d" Height="100" />
             </Grid>
         </Grid>
 
