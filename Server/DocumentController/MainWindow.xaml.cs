@@ -205,6 +205,7 @@ namespace DocumentController
 
             foreach (var item in _pptController)
             {
+                item.Clear();
                 if (item.Load(path, newTempPath) == true)
                 {
                     int height = (int)(width * _pptSlideHeightRatio);
