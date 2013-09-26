@@ -15,7 +15,6 @@ using System.Net.NetworkInformation;
 using System.IO;
 using OfficeInterface;
 using System.Reflection;
-using System.Web.Script.Serialization;
 using DocumentController.Http;
 using System.Threading;
 using Microsoft.Win32;
@@ -211,9 +210,7 @@ namespace DocumentController
                     int height = (int)(width * _pptSlideHeightRatio);
                     PPTDocument pptDocument = item.ReadAll(width, height);
 
-                    JavaScriptSerializer json = new JavaScriptSerializer();
-                    json.MaxJsonLength = Int32.MaxValue;
-                    string txt = json.Serialize(pptDocument);
+                    string txt = Newtonsoft.Json.JsonConvert.SerializeObject(pptDocument);
                     if (string.IsNullOrEmpty(txt) == false)
                     {
                         _snapshotForWindowsPhone = txt;

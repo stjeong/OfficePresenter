@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using OfficeInterface;
 using Microsoft.Office.Interop.PowerPoint;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Collections;
 
 namespace DocumentController
 {
@@ -210,10 +210,9 @@ namespace DocumentController
 
         public static ImageCodecInfo GetEncoderInfo(ImageFormat format)
         {
-            return ImageCodecInfo.GetImageEncoders().ToList().Find(delegate(ImageCodecInfo codec)
-            {
-                return codec.FormatID == format.Guid;
-            });
+            return Array.Find(
+                ImageCodecInfo.GetImageEncoders(),
+                (codec) => codec.FormatID == format.Guid);
         }
 
         public void SetCurrentSlide(int slideNumber)

@@ -20,6 +20,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{3BE3E9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeController", "Client\OfficeController\OfficeController.csproj", "{75669F13-290B-4BE6-90CF-CC82F8ABC30F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{61E567C8-EB31-4146-83B5-4E0B880322B1}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\Newtonsoft.Json.dll = Libraries\Newtonsoft.Json.dll
+		Libraries\Newtonsoft.Json.pdb = Libraries\Newtonsoft.Json.pdb
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
