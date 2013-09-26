@@ -43,7 +43,9 @@
             </Grid.ColumnDefinitions>
             
             <TextBlock VerticalAlignment="Center">IP</TextBlock>
-            <TextBox x:Name="txtIP" Text="{Binding Path=Application.IPSelected, Mode=TwoWay}" Grid.Column="1" Grid.ColumnSpan="2"></TextBox>
+            <TextBox x:Name="txtIP" Text="{Binding Path=Application.IPSelected, Mode=TwoWay}" Grid.Column="1" Grid.ColumnSpan="2"
+                     InputScope="Digits"
+                     ></TextBox>
             
             <TextBlock VerticalAlignment="Center" Grid.Row="1">Port</TextBlock>
             <TextBox x:Name="txtPort" Text="{Binding Path=Application.Port, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"></TextBox>
