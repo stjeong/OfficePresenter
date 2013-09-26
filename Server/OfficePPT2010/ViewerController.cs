@@ -81,37 +81,69 @@ namespace DocumentController
 
             PPTDocument document = new PPTDocument();
 
-            foreach (Slide slide in _current.Slides)
+            for (int i = 0; i < _current.Slides.Count; i ++)
             {
+                Slide slide = null;
+
+                try
+                {
+                    slide = _current.Slides[i];
+                }
+                catch
+                {
+                }
+
+                if (slide == null)
+                {
+                    continue;
+                }
+
                 string note = string.Empty;
                 int animationCount = 0;
 
-                SlideRange nodePath = slide.NotesPage;
+                SlideRange nodePath = null;
 
-                foreach (Shape shape in nodePath.Shapes)
+                try
                 {
-                    PpPlaceholderType currentType = PpPlaceholderType.ppPlaceholderObject;
+                    nodePath = slide.NotesPage;
+                }
+                catch { }
 
-                    try
+                if (nodePath != null)
+                {
+                    foreach (Shape shape in nodePath.Shapes)
                     {
-                        currentType = shape.PlaceholderFormat.Type;
-                    }
-                    catch { }
+                        PpPlaceholderType currentType = PpPlaceholderType.ppPlaceholderObject;
 
-                    if (currentType == PpPlaceholderType.ppPlaceholderBody)
-                    {
-                        if (shape.HasTextFrame == Microsoft.Office.Core.MsoTriState.msoTrue)
+                        try
                         {
-                            if (shape.TextFrame.HasText == Microsoft.Office.Core.MsoTriState.msoTrue)
+                            currentType = shape.PlaceholderFormat.Type;
+                        }
+                        catch { }
+
+                        if (currentType == PpPlaceholderType.ppPlaceholderBody)
+                        {
+                            if (shape.HasTextFrame == Microsoft.Office.Core.MsoTriState.msoTrue)
                             {
-                                note += shape.TextFrame.TextRange.Text;
+                                if (shape.TextFrame.HasText == Microsoft.Office.Core.MsoTriState.msoTrue)
+                                {
+                                    note += shape.TextFrame.TextRange.Text;
+                                }
                             }
                         }
-                    }
 
-                    if (shape.AnimationSettings.Animate == Microsoft.Office.Core.MsoTriState.msoTrue)
-                    {
-                        animationCount++;
+                        AnimationSettings animationSettings = null;
+
+                        try
+                        {
+                            animationSettings = shape.AnimationSettings;
+
+                            if (animationSettings.Animate == Microsoft.Office.Core.MsoTriState.msoTrue)
+                            {
+                                animationCount++;
+                            }
+                        }
+                        catch { }
                     }
                 }
 
@@ -172,7 +204,7 @@ namespace DocumentController
             catch
             {
             }
-            
+
             return string.Empty;
         }
 
