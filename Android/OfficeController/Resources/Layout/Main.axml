@@ -2,12 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<Button  
-    android:id="@+id/MyButton"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/Hello"
-    />
+    android:layout_height="fill_parent">
+    <TextView
+        android:text="Office Controller"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:layout_marginBottom="10dip" />
+    <TableLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableLayout1">
+        <TableRow
+            android:id="@+id/tableRow1">
+            <TextView
+                android:text="IP"
+                android:layout_column="0"
+                android:id="@+id/textView11"
+                android:layout_marginRight="10dip" />
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_column="1"
+                android:id="@+id/textView13"
+                android:inputType="number"
+                android:layout_marginRight="10dip" />
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/txtIP"
+                android:layout_column="2"
+                android:editable="true" />
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow2">
+            <TextView
+                android:text="Port"
+                android:layout_column="0"
+                android:id="@+id/textView12"
+                android:layout_marginRight="10dip" />
+            <TextView
+                android:text="5022"
+                android:layout_column="1"
+                android:id="@+id/txtPort"
+                android:layout_marginRight="10dip" />
+            <Button
+                android:text="Connect"
+                android:layout_column="2"
+                android:id="@+id/btnConnect" />
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow3">
+        </TableRow>
+    </TableLayout>
 </LinearLayout>

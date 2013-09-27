@@ -87,7 +87,7 @@ namespace OfficeController
             {
                 string url = string.Format("{0}:{1}", this.Application.IPSelected, this.Application.Port);
 
-#if DEBUG2
+#if DEBUG
                 MessageBox.Show(e.Error.ToString());
 #else
                 MessageBox.Show("Can't connect to Desktop Application: " + url);
