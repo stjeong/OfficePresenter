@@ -3,12 +3,6 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <TextView
-        android:text="Office Controller"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView1"
-        android:layout_marginBottom="10dip" />
     <TableLayout
         android:minWidth="25px"
         android:minHeight="25px"

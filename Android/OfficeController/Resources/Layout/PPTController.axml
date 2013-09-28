@@ -3,10 +3,17 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <TextView
-        android:text="Office Controller"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtTitle"
-        android:layout_marginBottom="10dip" />
+        android:layout_height="fill_parent">
+        <cheesebaron.horizontallistview.HorizontalListView
+            android:layout_width="fill_parent"
+            android:layout_height="100dip"
+            android:id="@+id/panoramaSlideList" />
+    </LinearLayout>
+    <cheesebaron.horizontallistview.HorizontalListView
+        android:layout_width="fill_parent"
+        android:layout_height="100dip"
+        android:id="@+id/bottomSlideList" />
 </LinearLayout>

@@ -45,16 +45,38 @@
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cheesebaron.HorizontalListView">
+      <HintPath>..\..\Libraries\Android\Cheesebaron.HorizontalListView.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\Libraries\Android\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Server\OfficeInterface\IDocumentSnapshot.cs">
+      <Link>Model\IDocumentSnapshot.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Server\OfficeInterface\IPPTController.cs">
+      <Link>Model\IPPTController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Server\OfficeInterface\PPTDocument.cs">
+      <Link>Model\PPTDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Server\OfficeInterface\PPTPage.cs">
+      <Link>Model\PPTPage.cs</Link>
+    </Compile>
     <Compile Include="App.cs" />
+    <Compile Include="BorderedImageView.cs" />
+    <Compile Include="BottomItemAdapter.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Model\SlidePage.cs" />
+    <Compile Include="PanoramaItemAdapter.cs" />
     <Compile Include="PPTController.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +85,12 @@
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\PPTController.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\bottomRow.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\panoramaRow.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

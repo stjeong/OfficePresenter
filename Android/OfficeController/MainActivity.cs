@@ -30,7 +30,7 @@ namespace OfficeController
             btnConnect.Click += btnConnect_Click;
 
 #if DEBUG
-            txtIP.Text = "192.168.0.19";
+            txtIP.Text = "192.168.1.84";
 #endif
         }
 

@@ -72,8 +72,8 @@ namespace OfficeController
 
             foreach (var item in this.Application.Document.List)
             {
-                byte[] jpegContents = Convert.FromBase64String(item.ImageAsText);
-                MemoryStream ms = new MemoryStream(jpegContents);
+                byte[] imgContents = Convert.FromBase64String(item.ImageAsText);
+                MemoryStream ms = new MemoryStream(imgContents);
 
                 BitmapImage bitmapImage = new BitmapImage();
                 bitmapImage.SetSource(ms);
