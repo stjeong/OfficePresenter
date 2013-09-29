@@ -15,6 +15,12 @@ namespace OfficeController
 {
     public class App
     {
+        static string _documentText;
+        public static string DocumentText
+        {
+            get { return _documentText; }
+            set { _documentText = value; }
+        }
 
         public static bool CallUrl(string url, DownloadStringCompletedEventHandler handler)
         {

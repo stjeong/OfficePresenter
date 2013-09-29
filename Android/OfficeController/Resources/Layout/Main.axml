@@ -16,17 +16,13 @@
                 android:layout_column="0"
                 android:id="@+id/textView11"
                 android:layout_marginRight="10dip" />
-            <TextView
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_column="1"
-                android:id="@+id/textView13"
-                android:inputType="number"
-                android:layout_marginRight="10dip" />
-            <TextView
-                android:textAppearance="?android:attr/textAppearanceMedium"
+            <EditText
+                android:layout_span="2"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
                 android:id="@+id/txtIP"
-                android:layout_column="2"
-                android:editable="true" />
+                android:layout_column="1" />
         </TableRow>
         <TableRow
             android:id="@+id/tableRow2">

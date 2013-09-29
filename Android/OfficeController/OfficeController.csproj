@@ -20,7 +20,7 @@
     <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
-    <JavaMaximumHeapSize />
+    <JavaMaximumHeapSize>100m</JavaMaximumHeapSize>
     <JavaOptions />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -43,12 +43,21 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkSkip />
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <BundleAssemblies>False</BundleAssemblies>
+    <AndroidKeyStore>True</AndroidKeyStore>
+    <AndroidSigningKeyStore>D:\Settings\my.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>100000</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>AndPub</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>100000</AndroidSigningKeyPass>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cheesebaron.HorizontalListView">
       <HintPath>..\..\Libraries\Android\Cheesebaron.HorizontalListView.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
+    <Reference Include="Mono.Android.Export" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Libraries\Android\Newtonsoft.Json.dll</HintPath>
@@ -73,13 +82,14 @@
     </Compile>
     <Compile Include="App.cs" />
     <Compile Include="BorderedImageView.cs" />
+    <Compile Include="BottomHorizontalListView.cs" />
     <Compile Include="BottomItemAdapter.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Model\SlidePage.cs" />
-    <Compile Include="PanoramaItemAdapter.cs" />
     <Compile Include="PPTController.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializableString.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -88,9 +98,6 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\bottomRow.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\panoramaRow.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -104,6 +111,7 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <LinkDescription Include="FixAdapterLinking.xml" />
     <Content Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

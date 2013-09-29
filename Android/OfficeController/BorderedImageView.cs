@@ -22,39 +22,54 @@ namespace OfficeController
         public const int BORDER_BOTTOM = 0x00000004;
         public const int BORDER_LEFT = 0x00000008;
 
-        public bool Border { get; set; }
+        bool _border;
+        public bool Border
+        {
+            get { return _border; }
+            set
+            {
+                _border = value;
+            }
+        }
         public int Index { get; set; }
+
+        PPTController _pptController;
 
         public BorderedImageView(Context context)
             : base(context)
         {
-            init();
+            init(context);
         }
 
         public BorderedImageView(Context context, IAttributeSet attrs, int defStyle)
             : base(context, attrs, defStyle)
         {
-            init();
+            init(context);
         }
 
         public BorderedImageView(Context context, IAttributeSet attrs)
             : base(context, attrs)
         {
-            init();
+            init(context);
         }
 
-        private void init()
+        private void init(Context context)
         {
             paint.SetStyle(Paint.Style.Stroke);
             paint.Color = Color.Yellow;
             paint.StrokeWidth = 2;
+
+            _pptController = context as PPTController;
         }
 
         protected override void OnDraw(Canvas canvas)
         {
             base.OnDraw(canvas);
 
-            if (Border == false) return;
+            if (Border == false)
+            {
+                return;
+            }
 
             float width = this.Width - (paint.StrokeWidth);
             float height = this.Height - (paint.StrokeWidth);

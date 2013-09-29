@@ -31,6 +31,8 @@ namespace OfficeController
 
 #if DEBUG
             txtIP.Text = "192.168.1.84";
+#else
+            txtIP.Text = "192.168.1.84";
 #endif
         }
 
@@ -83,8 +85,14 @@ namespace OfficeController
 
                         i.PutExtra("ip", txtIP.Text);
                         i.PutExtra("port", txtPort.Text);
-                        i.PutExtra("document", e.Result);
 
+                        //Bundle bundle = new Bundle();
+                        //SerializableString result = new SerializableString();
+                        //result.Text = e.Result;
+                        //bundle.PutSerializable("document", result);
+                        // i.PutExtra("document", e.Result);
+
+                        App.DocumentText = e.Result;
                         StartActivity(i);
                     }
                 }

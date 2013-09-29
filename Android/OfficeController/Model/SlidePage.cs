@@ -17,5 +17,7 @@ namespace OfficeController.Model
         public int Id { get; set; }
         public Bitmap Image { get; set; }
         public string Memo { get; set; }
+        public int AnimationCount { get; set; }
+        public int AnimationRemains { get; set; }
     }
 }
