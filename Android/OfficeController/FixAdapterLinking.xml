@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<linker>
+  <assembly fullname="Mono.Android">
+    <type fullname="Android.Widget.AdapterView" >
+      <method name="GetGetAdapterHandler" />
+      <method name="GetSetAdapter_Landroid_widget_Adapter_Handler" />
+    </type>
+  </assembly>
+</linker>
