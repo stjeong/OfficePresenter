@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1" android:versionName="1.0.0" package="kr.pe.sysnet.OfficePresenter">
-	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="7" />
-	<application android:label="OfficePresenter"></application>
+	<uses-sdk android:minSdkVersion="14" android:targetSdkVersion="14" />
+	<application android:label="OfficePresenter">
+		<activity android:name="com.google.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+	</application>
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

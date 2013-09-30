@@ -5,6 +5,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Android", "Android", "{F255
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeController", "Android\OfficeController\OfficeController.csproj", "{C00DD68F-DBEB-4755-A227-1768F6C94533}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdMob", "Android\Admob\AdMob.csproj", "{74B48A13-31DC-40C1-958F-F2979FD0C59D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,11 +19,16 @@ Global
 		{C00DD68F-DBEB-4755-A227-1768F6C94533}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C00DD68F-DBEB-4755-A227-1768F6C94533}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C00DD68F-DBEB-4755-A227-1768F6C94533}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{74B48A13-31DC-40C1-958F-F2979FD0C59D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74B48A13-31DC-40C1-958F-F2979FD0C59D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74B48A13-31DC-40C1-958F-F2979FD0C59D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74B48A13-31DC-40C1-958F-F2979FD0C59D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C00DD68F-DBEB-4755-A227-1768F6C94533} = {F2553F72-830E-40A3-82B8-C2F28C7F11F8}
+		{74B48A13-31DC-40C1-958F-F2979FD0C59D} = {F2553F72-830E-40A3-82B8-C2F28C7F11F8}
 	EndGlobalSection
 EndGlobal

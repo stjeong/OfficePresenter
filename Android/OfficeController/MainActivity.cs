@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using System.Net;
+using Com.Google.Ads;
 
 namespace OfficeController
 {
@@ -16,6 +17,7 @@ namespace OfficeController
         Button btnConnect;
         TextView txtIP;
         TextView txtPort;
+        AdView adView;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -26,6 +28,14 @@ namespace OfficeController
             btnConnect = FindViewById<Button>(Resource.Id.btnConnect);
             txtIP = FindViewById<TextView>(Resource.Id.txtIP);
             txtPort = FindViewById<TextView>(Resource.Id.txtPort);
+
+            adView = FindViewById<AdView>(Resource.Id.ad);
+            AdRequest adRequest = new AdRequest();
+#if DEBUG
+            adRequest.SetTesting(true);
+            adRequest.AddTestDevice(AdRequest.TestEmulator);
+#endif
+            adView.LoadAd(adRequest);
 
             btnConnect.Click += btnConnect_Click;
 
