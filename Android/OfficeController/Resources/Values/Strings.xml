@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Hello">Hello World, Click Me!</string>
     <string name="ApplicationName">OfficeController</string>
   <string name="description">
 1. Download desktop application at http://www.sysnet.pe.kr/go/ppt

@@ -34,7 +34,7 @@ using Android.App;
 [assembly: UsesPermission(Android.Manifest.Permission.WriteExternalStorage)]
 
 #if RELEASE 
-[assembly: Application(Debuggable=false)] 
+[assembly: Application(Debuggable = false, Icon = "@drawable/icon")] 
 #else
-[assembly: Application(Debuggable = true)]
+[assembly: Application(Debuggable = true, Icon = "@drawable/icon")]
 #endif
