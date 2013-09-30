@@ -22,20 +22,20 @@
         </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <EditText
                 android:layout_span="2"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
+                android:inputType="text"
                 android:id="@+id/txtIP"
                 android:layout_column="1" />
         </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <Button

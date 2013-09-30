@@ -57,6 +57,15 @@ namespace OfficeController
 
             //string document = Intent.GetStringExtra("document");
             string document = App.DocumentText;
+            if (string.IsNullOrEmpty(document) == true)
+            {
+                Intent i = new Intent(this, typeof(MainActivity));
+
+                i.PutExtra("ip", _ip);
+                i.PutExtra("port", _port);
+
+                StartActivity(i);
+            }
 
             _pptDocument = Newtonsoft.Json.JsonConvert.DeserializeObject<PPTDocument>(document);
 
@@ -107,7 +116,7 @@ namespace OfficeController
             _currentAnimation = 0;
 
             string url = string.Format("http://{0}:{1}/startShow", _ip, _port);
-            App.CallUrl(url, null);
+            App.CallUrl(url, null, null);
         }
 
         internal void SetSlide(int position)
@@ -120,7 +129,7 @@ namespace OfficeController
             _txtMemo.Text = _slideList[position].Memo;
 
             string url = string.Format("http://{0}:{1}/setSlide/{2}", _ip, _port, position + 1);
-            App.CallUrl(url, null);
+            App.CallUrl(url, null, null);
         }
 
         float _downX;
@@ -226,7 +235,7 @@ namespace OfficeController
             currentPage.AnimationRemains--;
 
             string url = string.Format("http://{0}:{1}/nextAnimation", _ip, _port);
-            App.CallUrl(url, SetAnimationCompleted);
+            App.CallUrl(url, SetAnimationCompleted, null);
         }
 
         void SetAnimationCompleted(object sender, DownloadStringCompletedEventArgs e)

@@ -29,18 +29,34 @@ namespace OfficeController
 
             btnConnect.Click += btnConnect_Click;
 
+            string ipFrom = Intent.GetStringExtra("ip");
+            string portFrom = Intent.GetStringExtra("port");
+
+            if (string.IsNullOrEmpty(ipFrom) == false)
+            {
+                txtIP.Text = ipFrom;
+            }
+
+            if (string.IsNullOrEmpty(portFrom) == false)
+            {
+                txtPort.Text = portFrom;
+            }
+
 #if DEBUG
             txtIP.Text = "192.168.1.84";
 #else
-            txtIP.Text = "192.168.1.84";
+        //    txtIP.Text = "192.168.1.84";
 #endif
         }
 
         void btnConnect_Click(object sender, EventArgs e)
         {
-
             string url = string.Format("http://{0}:{1}/getSnapshot", txtIP.Text, txtPort.Text);
-            if (App.CallUrl(url, SnapshotCompleted) == true)
+
+            TimeoutContext tc = new TimeoutContext();
+            tc.Timeout = 5000;
+
+            if (App.CallUrl(url, SnapshotCompleted, tc) == true)
             {
                 EnableControls(false);
             }
@@ -59,15 +75,16 @@ namespace OfficeController
         void SnapshotCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             EnableControls(true);
+            string url = string.Format("{0}:{1}", txtIP.Text, txtPort.Text);
 
             if (e.Cancelled == true)
             {
+                ShowToastMessage("Can't connect to Desktop Application: " + url);
                 return;
             }
 
             if (e.Error != null)
             {
-                string url = string.Format("{0}:{1}", txtIP.Text, txtPort.Text);
 
 #if DEBUG
                 ShowToastMessage(e.Error.ToString());

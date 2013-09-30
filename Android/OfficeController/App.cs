@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -22,7 +23,7 @@ namespace OfficeController
             set { _documentText = value; }
         }
 
-        public static bool CallUrl(string url, DownloadStringCompletedEventHandler handler)
+        public static bool CallUrl(string url, DownloadStringCompletedEventHandler handler, TimeoutContext tc)
         {
             WebClient wc = new WebClient();
             // wc.Headers[HttpRequestHeader.IfModifiedSince] = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
@@ -43,7 +44,39 @@ namespace OfficeController
                 return false;
             }
 
-            wc.DownloadStringAsync(uri, null);
+            wc.DownloadStringAsync(uri, tc);
+            if (tc != null)
+            {
+                wc.DownloadProgressChanged += tc.wc_DownloadProgressChanged;
+                tc.Tag = wc;
+
+                ThreadPool.QueueUserWorkItem(
+                    (obj) =>
+                    {
+                        TimeoutContext timeContext = obj as TimeoutContext;
+                        if (timeContext == null)
+                        {
+                            return;
+                        }
+
+                        WebClient wcInProgress = timeContext.Tag as WebClient;
+                        if (wcInProgress == null)
+                        {
+                            return;
+                        }
+
+                        Thread.Sleep(timeContext.Timeout);
+                        if (timeContext.Connected == true)
+                        {
+                            return;
+                        }
+
+                        if (timeContext.Completed == false)
+                        {
+                            wcInProgress.CancelAsync();
+                        }
+                    }, tc);
+            }
 
             return true;
         }
