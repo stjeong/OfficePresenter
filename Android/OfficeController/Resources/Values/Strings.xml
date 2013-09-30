@@ -2,4 +2,11 @@
 <resources>
     <string name="Hello">Hello World, Click Me!</string>
     <string name="ApplicationName">OfficeController</string>
+  <string name="description">
+1. Download desktop application at http://www.sysnet.pe.kr/go/ppt
+\n\n 2. Run the desktop application and open your Powerpoint document to go show.\n\n
+3. Type IP address of your PC running the desktop application, then press "Connect" button on this app.\n\n
+4. Enjoy your app.
+  </string>
+  
 </resources>

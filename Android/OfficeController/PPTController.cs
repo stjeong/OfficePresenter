@@ -90,7 +90,7 @@ namespace OfficeController
 
                 SlidePage page = new SlidePage();
                 page.Image = bitmap;
-                page.Memo = item.Note;
+                page.Memo = item.Note.Replace('\r', '\n');
                 page.Id = index;
                 page.AnimationCount = item.AnimationCount;
                 page.AnimationRemains = page.AnimationCount;
