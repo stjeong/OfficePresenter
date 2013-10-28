@@ -21,7 +21,6 @@ Thumbs.db
 [Dd]ebug*/
 *.lib
 *.sbr
-SignCert.pfx
 obj/
 [Rr]elease*/
 _ReSharper*/
@@ -32,3 +31,7 @@ SubmissionInfo/
 *.apk
 *.mdb
 AdmobLib/
+*.snk
+*.pfx
+*.publishsettings
+publish/
