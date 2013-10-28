@@ -12,10 +12,10 @@ Download
 ================================
 You can download these app as follows,
 
-Windows Marketplace - OfficeController
+* Windows Marketplace - OfficeController
 ; [http://www.windowsphone.com/s?appid=db531773-4b34-42a2-a61a-fcfb7353f2e7](http://www.windowsphone.com/s?appid=db531773-4b34-42a2-a61a-fcfb7353f2e7)
 
-Google Play - OfficePresenter
+* Google Play - OfficePresenter
 ; [https://play.google.com/store/apps/details?id=kr.pe.sysnet.OfficePresenter](https://play.google.com/store/apps/details?id=kr.pe.sysnet.OfficePresenter)
 
 
